@@ -14,7 +14,7 @@ config.h
 **/node_modules
 **/obj
 .ntvs*
-bin/
+/bin/
 .idea
 .vs
 .metadata
