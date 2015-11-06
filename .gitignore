@@ -11,3 +11,10 @@ info/*
 msg.txt
 TODO.txt
 config.h
+**/node_modules
+**/obj
+.ntvs*
+bin/
+.idea
+.vs
+.metadata
