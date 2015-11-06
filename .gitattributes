@@ -1,18 +1,13 @@
 # Set default behaviour, in case users don't have core.autocrlf set.
-* text=lf
+* text=auto
 
-# Explicitly declare text files we want to always be normalized and converted 
-# to native line endings on checkout.
-*.cpp 	text
-*.c 	text
-*.h 	text
-*.hpp 	text
-*.html	text
-*.css	text
-*.hjs	text
-*-less	text
-*.js	text
-*.json	text
+# Explicitly declare text files we want to always be with LF line ending
+*.html	text eol=lf
+*.css	text eol=lf
+*.hjs	text eol=lf
+*.less	text eol=lf
+*.js	text eol=lf
+*.json	text eol=lf
 
 # Declare files that will always have CRLF line endings on checkout.
 *.sln text eol=crlf
