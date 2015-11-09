@@ -5,31 +5,34 @@
     <link rel='stylesheet' href='/stylesheets/style.css' />
       <style type="text/css">
           .style1 {
-              width: 105px;
+              width: 50px;
+              text-align: left;
           }
 
           .style2 {
-              width: 290px;
+              width: 200px;
+              text-align: left;
           }
 
           .style3 {
-              width: 224px;
+              width: 300px;
+              text-align: left;
           }
       </style>
   </head>
   <body>
-    <h1>List of Receipes</h1>
+    <h1>List of Recipes</h1>
       <table frame="border" style="width: 44%;">
           <tr>
-              <th class="style3">Id</th>
-              <th class="style2">Desc</th>
-              <th class="style1">Ingrediants</th>
+              <th class="style1">No</th>
+              <th class="style2">Description</th>
+              <th class="style3">Ingredient</th>
           </tr>
           {{#list}}
           <tr>
-              <td class="style3">{{ id }}</td>
+              <td class="style1">{{ id }}</td>
               <td class="style2">{{ desc }}</td>
-              <td class="style1">&nbsp; </td>
+              <td class="style3">&nbsp; </td>
           </tr>
           {{/list}}
       </table>
