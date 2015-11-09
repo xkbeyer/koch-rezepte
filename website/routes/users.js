@@ -22,7 +22,6 @@ function getData(res) {
             data.push( { id : rows[i].id, desc : rows[i].description } );
         }
         var complData = { title: "Content", list: data };
-        console.log(complData);
         res.render('dbonerecord', complData );
     });
     return ;
