@@ -25,14 +25,18 @@
       <table frame="border" style="width: 44%;">
           <tr>
               <th class="style1">No</th>
-              <th class="style2">Description</th>
-              <th class="style3">Ingredient</th>
+              <th class="style2">Name</th>
+              <th class="style3">Description</th>
           </tr>
           {{#list}}
           <tr>
-              <td class="style1">{{ id }}</td>
-              <td class="style2">{{ desc }}</td>
-              <td class="style3">&nbsp; </td>
+              <td class="style1">
+                  <form action="users" method="get">
+                      <input type="submit" name="ShowRecipe" value="{{ id }}" />
+                  </form>
+              </td>
+              <td class="style2">{{ name }}</td>
+              <td class="style3">{{ desc }}</td>
           </tr>
           {{/list}}
       </table>
