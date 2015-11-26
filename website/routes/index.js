@@ -3,7 +3,7 @@ var router = express.Router();
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  res.render('index', { title: 'Fanny\'s Kochrezepte Sammlung ' });
+  res.render('index', { title: 'Meine Kochrezepte Sammlung ' });
 });
 
 module.exports = router;

@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>{{ title }}</title>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+      <style type="text/css">
+          .style1 {
+              width: 50px;
+              text-align: left;
+          }
+
+          .style2 {
+              width: 200px;
+              text-align: left;
+          }
+
+          .style3 {
+              width: 300px;
+              text-align: left;
+          }
+      </style>
+  </head>
+  <body>
+    <h1>Ingredients of {{ title }}</h1>
+    <table frame="border" style="width: 44%;">
+        <tr>
+            <th class="style2">Quantity</th>
+            <th class="style2">Unit</th>
+            <th class="style3">Name</th>
+        </tr>
+        {{#list}}
+        <tr>
+            <td class="style2">{{ quantity }}</td>
+            <td class="style2">{{ unit }}</td>
+            <td class="style3">{{ name }}</td>
+        </tr>
+        {{/list}}
+    </table>
+    <br />
+    <!--
+        <a href="openForm"><button id="openForm">OPEN</button></a>
+    -->
+    <form action="submit.htm" method="get">
+        <textarea name="qty" rows="1" cols="5"></textarea>
+        <textarea name="unit" rows="1" cols="10"></textarea>
+        <textarea name="name" rows="1" cols="70"></textarea>
+        <button type="submit" name="DoAddIngredient" formmethod="get" formaction="users" value= '{ "id" : "{{RezeptID}}", "name": "{{title}}" }'>Add</button>
+    </form>
+  </body>
+</html>

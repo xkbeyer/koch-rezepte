@@ -22,20 +22,57 @@ CREATE TABLE `koch-rezepte`.`zutaten_rezept` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `rezept-id` int(11) NOT NULL,
   `zutat-id` int(11) NOT NULL,
-  `quantity` decimal(10,0) NOT NULL DEFAULT '0',
+  `quantity` decimal(6,3) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COMMENT='Link between the recipe and thier indredients';
 
+USE `koch-rezepte`;
 CREATE 
-    ALGORITHM = UNDEFINED 
+     OR REPLACE ALGORITHM = UNDEFINED 
     DEFINER = `root`@`localhost` 
     SQL SECURITY DEFINER
 VIEW `ingredients` AS
     SELECT 
+        `rezept`.`id` AS `rezept`,
+        `rezept`.`name` AS `rezeptname`,
         `zutaten_rezept`.`quantity` AS `quantity`,
         `zutaten`.`unit` AS `unit`,
         `zutaten`.`name` AS `name`
     FROM
         ((`rezept`
         JOIN `zutaten_rezept` ON ((`rezept`.`id` = `zutaten_rezept`.`rezept-id`)))
-        JOIN `zutaten` ON ((`zutaten`.`id` = `zutaten_rezept`.`rezept-id`)))
+        JOIN `zutaten` ON ((`zutaten`.`id` = `zutaten_rezept`.`zutat-id`)));
+
+USE `koch-rezepte`;
+DROP procedure IF EXISTS `add_ingredient`;
+
+DELIMITER $$
+USE `koch-rezepte`$$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `add_ingredient`(IN rezept_name varchar(255), in qty float,in unit varchar(10), in ingredient varchar(255), out error_code int)
+BEGIN
+
+	set error_code = 0;
+
+	set @rezept_id = (select id from `koch-rezepte`.`rezept` where `name` = rezept_name);
+	if( @rezept_id is null ) then 
+		set error_code = -1;
+	else
+		set @zid = (select id from `koch-rezepte`.`zutaten` where `name` = ingredient);
+		if( @zid is NULL) then
+			insert into `koch-rezepte`.`zutaten` (`unit`,`name`) values (unit, ingredient);
+			set @zid = LAST_INSERT_ID();
+		end if;
+		set @exist = (select id from `koch-rezepte`.`zutaten_rezept` where `rezept-id` = @rezept_id and `zutat-id` = @zid);
+		if( @exist is null ) then 
+			insert into `koch-rezepte`.`zutaten_rezept` (`rezept-id`, `zutat-id`, `quantity`) values (@rezept_id, @zid, qty);
+		else
+			set error_code = -2;
+		end if;
+	end if;
+
+END$$
+
+DELIMITER ;
+
+
+
