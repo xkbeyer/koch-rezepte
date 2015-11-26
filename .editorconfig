@@ -1,9 +1,10 @@
 # top-most EditorConfig file
 root = true
 
-# newline ending every file
+# newline ending every file, unix line endings
 [*]
 insert_final_newline = true
+end_of_line = lf
 
 # tab indentation
 [*.cpp]
