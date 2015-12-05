@@ -1,16 +1,9 @@
 var express = require('express');
 var router = express.Router();
 
-var mysql = require('mysql');
-var connection = mysql.createConnection({
-    host     : 'localhost',
-    user     : 'kochmate',
-    password : 'epsilon-signum',
-    database : 'koch-rezepte'
-});
 
-function getData(res) {
-    connection.query('SELECT id, name, description from rezept', function (err, rows, fields) {
+function getData(dbcon, res) {
+    dbcon.query('SELECT id, name, description from rezept', function (err, rows, fields) {
         if (err) {
             console.log(err);
             throw err;
@@ -25,8 +18,8 @@ function getData(res) {
     return ;
 }
 
-function getIngredients(id, res) {
-    connection.query('SELECT * FROM `koch-rezepte`.ingredients where rezept = ' + connection.escape(id), function (err, rows, fields) {
+function getIngredients(id, dbcon, res) {
+    dbcon.query('SELECT * FROM `koch-rezepte`.ingredients where rezept = ' + dbcon.escape(id), function (err, rows, fields) {
         if (err) {
             console.log(err);
             throw err;
@@ -50,7 +43,7 @@ function addIngredient(req, res) {
     var rezeptname = o.name;
     var rezeptid = o.id;
     var sqlStatement = "call add_ingredient('" + rezeptname + "'," + req.query.qty + ",'" + req.query.unit + "','" +  req.query.name + "', @err_code)";
-    connection.query(sqlStatement, function (err, rows, fields) {
+    req.req.dbcon.query(sqlStatement, function (err, rows, fields) {
         if (err) {
             console.log(err);
         } else {
@@ -65,13 +58,12 @@ function addIngredient(req, res) {
 
 router.get('/', function (req, res, next) {
     if (req.query.ShowRecipe) {
-        getIngredients(req.query.ShowRecipe, res);
+        getIngredients(req.query.ShowRecipe, req.dbcon, res);
     } else if (req.query.DoAddIngredient) {
         addIngredient(req, res);
     } else {
-        var rc = getData(res);
+        var rc = getData(req.dbcon, res);
     }
-
 });
 
 
