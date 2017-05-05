@@ -5,12 +5,12 @@
     <link rel='stylesheet' href='/stylesheets/style.css' />
       <style type="text/css">
           .style1 {
-              width: 50px;
+              width: 70px;
               text-align: left;
           }
 
           .style2 {
-              width: 200px;
+              width: 70px;
               text-align: left;
           }
 
@@ -22,19 +22,24 @@
   </head>
   <body>
     <h1>Ingredients of {{ title }}</h1>
-    <table frame="border" style="width: 44%;">
+    <table frame="border" style="width: 43.8%;">
         <tr>
-            <th class="style2">Quantity</th>
+            <th class="style1">Quantity</th>
             <th class="style2">Unit</th>
             <th class="style3">Name</th>
         </tr>
+        <form>
         {{#list}}
         <tr>
-            <td class="style2">{{ quantity }}</td>
+            <td class="style1">{{ quantity }}</td>
             <td class="style2">{{ unit }}</td>
             <td class="style3">{{ name }}</td>
+            <td>
+                <button type="submit" name="DoDelIngredient" formmethod="get" formaction="users" value= '{ "id" : "{{RezeptID}}", "item" : "{{name}}" }'>Delete</button>
+            </td>
         </tr>
         {{/list}}
+        </form>
     </table>
     <br />
     <!--
@@ -42,8 +47,8 @@
     -->
     <form action="submit.htm" method="get">
         <textarea name="qty" rows="1" cols="5"></textarea>
-        <textarea name="unit" rows="1" cols="10"></textarea>
-        <textarea name="name" rows="1" cols="70"></textarea>
+        <textarea name="unit" rows="1" cols="6"></textarea>
+        <textarea name="name" rows="1" cols="50"></textarea>
         <button type="submit" name="DoAddIngredient" formmethod="get" formaction="users" value= '{ "id" : "{{RezeptID}}", "name": "{{title}}" }'>Add</button>
     </form>
   </body>

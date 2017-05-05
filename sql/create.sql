@@ -69,6 +69,34 @@ BEGIN
 			set error_code = -2;
 		end if;
 	end if;
+END$$
+
+DELIMITER ;
+
+DROP procedure IF EXISTS `del_ingredient`;
+
+DELIMITER $$
+USE `koch-rezepte`$$
+CREATE DEFINER=`root`@`localhost` FUNCTION `del_ingredient`(`rid` INT, `item` VARCHAR(50))
+	RETURNS int(11)
+	LANGUAGE SQL
+	DETERMINISTIC
+	CONTAINS SQL
+	SQL SECURITY DEFINER
+	COMMENT 'Deletes an ingredient from a recipe'
+BEGIN
+	set @zid = (select id from `koch-rezepte`.`zutaten` where `name` = item);
+	if( @zid is NULL) then
+		return -1;
+	else
+		set @del_id = (select id from `koch-rezepte`.`zutaten_rezept` where `rezept-id` = rid and `zutat-id` = @zid);
+		if( @del_id is null ) then 
+			return -2;
+		else
+			delete from `koch-rezepte`.`zutaten_rezept` where `id` = @del_id;
+		end if;
+	end if;
+	return 0 ;
 
 END$$
 

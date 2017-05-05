@@ -43,14 +43,29 @@ function addIngredient(req, res) {
     var rezeptname = o.name;
     var rezeptid = o.id;
     var sqlStatement = "call add_ingredient('" + rezeptname + "'," + req.query.qty + ",'" + req.query.unit + "','" +  req.query.name + "', @err_code)";
-    req.req.dbcon.query(sqlStatement, function (err, rows, fields) {
+    req.dbcon.query(sqlStatement, function (err, rows, fields) {
         if (err) {
             console.log(err);
-        } else {
-            if (rows.affectedRows == 1) {
-            }
         }
         res.redirect("/users?ShowRecipe=" + rezeptid);
+    });
+}
+
+function delIngredient(req, res) {
+    var o = JSON.parse(req.query.DoDelIngredient);
+    console.log("del ingredient(" + o.id + ", " + o.item + ")");
+    var sqlStatement = "select del_ingredient(" + req.dbcon.escape(o.id) + ",'" + o.item + "');";
+    req.dbcon.query(sqlStatement, function(err, rows, fields) {
+        if( err ) {
+            console.log(err);
+        } else {
+            if (rows.length != 1 ) {
+                console.log("Missing return code.");
+            } else if (rows[0] != 0) {
+                console.log("Returned error code = " + rows[0]);
+            }
+        }
+        res.redirect("/users?ShowRecipe=" + o.id);
     });
 }
 
@@ -61,6 +76,8 @@ router.get('/', function (req, res, next) {
         getIngredients(req.query.ShowRecipe, req.dbcon, res);
     } else if (req.query.DoAddIngredient) {
         addIngredient(req, res);
+    } else if (req.query.DoDelIngredient) {
+        delIngredient(req,res);
     } else {
         var rc = getData(req.dbcon, res);
     }
