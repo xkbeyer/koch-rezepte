@@ -48,14 +48,17 @@ DROP procedure IF EXISTS `add_ingredient`;
 
 DELIMITER $$
 USE `koch-rezepte`$$
-CREATE DEFINER=`root`@`localhost` PROCEDURE `add_ingredient`(IN rezept_name varchar(255), in qty float,in unit varchar(10), in ingredient varchar(255), out error_code int)
+CREATE DEFINER=`root`@`localhost` FUNCTION `add_ingredient`(`rezept_name` varchar(255), `qty` float, `unit` varchar(10), `ingredient` varchar(255))
+	RETURNS INT
+	LANGUAGE SQL
+	DETERMINISTIC
+	CONTAINS SQL
+	SQL SECURITY DEFINER
+	COMMENT ''
 BEGIN
-
-	set error_code = 0;
-
 	set @rezept_id = (select id from `koch-rezepte`.`rezept` where `name` = rezept_name);
 	if( @rezept_id is null ) then 
-		set error_code = -1;
+		return -1;
 	else
 		set @zid = (select id from `koch-rezepte`.`zutaten` where `name` = ingredient);
 		if( @zid is NULL) then
@@ -66,9 +69,10 @@ BEGIN
 		if( @exist is null ) then 
 			insert into `koch-rezepte`.`zutaten_rezept` (`rezept-id`, `zutat-id`, `quantity`) values (@rezept_id, @zid, qty);
 		else
-			set error_code = -2;
+			return -2;
 		end if;
 	end if;
+	return 0;
 END$$
 
 DELIMITER ;

@@ -42,10 +42,16 @@ function addIngredient(req, res) {
     var o = JSON.parse(req.query.DoAddIngredient);
     var rezeptname = o.name;
     var rezeptid = o.id;
-    var sqlStatement = "call add_ingredient('" + rezeptname + "'," + req.query.qty + ",'" + req.query.unit + "','" +  req.query.name + "', @err_code)";
+    var sqlStatement = "select add_ingredient('" + rezeptname + "'," + req.query.qty + ",'" + req.query.unit + "','" +  req.query.name + "')";
     req.dbcon.query(sqlStatement, function (err, rows, fields) {
         if (err) {
             console.log(err);
+        } else {
+            if (rows.length != 1 ) {
+                console.log("Missing return code.");
+            } else if (rows[0] != 0) {
+                console.log("Returned error code = " + rows[0]);
+            }
         }
         res.redirect("/users?ShowRecipe=" + rezeptid);
     });
